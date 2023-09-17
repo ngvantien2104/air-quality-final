@@ -9,11 +9,12 @@
   box-shadow: none;
 }
 .leaflet-popup-content-wrapper {
-  background:#2c3e50;
+  background:#70f44b;
   color:#fff;
   font-size:16px;
   line-height:24px;
   border-radius: 0px;
+  text-align: center;
   }
   .leaflet-popup-content-wrapper a {
     color:rgba(255,255,255,0.1);
@@ -21,4 +22,16 @@
   .leaflet-popup-tip-container {
   width:30px;
   height:15px;
+  }
+  .sildebar{
+    padding: 10px;
+    position: absolute;
+    width: 250px;
+    height: 100vh;
+    z-index: 1000;
+    background: white;
+    margin-left: 0px;
+    transition: 0.5s;
+    text-align: center;
+    font-size:30px;
   }

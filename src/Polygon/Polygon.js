@@ -17,8 +17,17 @@ function LocationPopup() {
     },
     })
         return (
-            <Popup position={[lat,lng]}>BẠN ĐANG Ở<br/>
-                {properties}<br/> CHỈ SỐ BỤI TẠI ĐÂY LÀ
+            <Popup position={[lat,lng]}>
+                
+                <h2>
+                Khu vưc {properties}
+                </h2>
+                <h3>
+                Chỉ số không khí trung bình ở đây là 50
+                </h3>
+                <h3>
+                Đây là mức độ không khí an toàn nhưng bạn vẫn nên đeo khẩu trang khi ra đường
+                </h3>
             </Popup>
         )
 }
@@ -41,7 +50,7 @@ const PolygonDaNang = () => {
             mouseover: (e)=> {
             const layer = e.target;
             layer.setStyle({
-                fillOpacity: 0.5,
+                fillOpacity: 0.25,
                 weight:2,
                 dashArray:"3",
                 color:'white',
@@ -51,7 +60,7 @@ const PolygonDaNang = () => {
             mouseout : (e) => {
             const layer = e.target;
             layer.setStyle({
-                fillOpacity: 0.2,
+                fillOpacity: 0,
                 weight:2,
                 dashArray:"3",
                 color:'white',
