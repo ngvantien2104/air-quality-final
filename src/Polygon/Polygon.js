@@ -13,7 +13,7 @@ function LocationPopup() {
     click(e) {
         setLat(e.latlng.lat);
         setLng(e.latlng.lng);
-        map.flyTo([lat,lng]);
+        
     },
     })
         return (
