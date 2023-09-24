@@ -8,14 +8,31 @@
   border: none;
   box-shadow: none;
 }
-.leaflet-popup-content-wrapper {
-  background:#70f44b;
+.red .leaflet-popup-content-wrapper  {
+  background:red;
   color:#fff;
   font-size:16px;
   line-height:24px;
   border-radius: 0px;
   text-align: center;
   }
+  .green .leaflet-popup-content-wrapper  {
+    background:green;
+    color:#fff;
+    font-size:16px;
+    line-height:24px;
+    border-radius: 0px;
+    text-align: center;
+    }
+    .yellow .leaflet-popup-content-wrapper  {
+      background:yellow;
+      color:#fff;
+      font-size:16px;
+      line-height:24px;
+      border-radius: 0px;
+      text-align: center;
+      }
+    
   .leaflet-popup-content-wrapper a {
     color:rgba(255,255,255,0.1);
   }

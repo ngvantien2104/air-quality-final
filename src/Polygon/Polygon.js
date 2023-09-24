@@ -1,40 +1,97 @@
 import { polygonDaNang } from "./polygondanang";
 import { Polygon,Marker, Popup, useMapEvents} from 'react-leaflet'
-
+import {cityPoly} from "./cityPoly"
 import { marker,map ,L} from "leaflet";
 
 import React, {  useState } from "react";
 
-var properties;
+import { point, polygon, booleanPointInPolygon, random } from '@turf/turf';
+var properties= "không xác định";
+
+
+
+//hàm kiểm trai xem 1 điểm có năm trong 1 vùng hay không
+function isPointInsidePolygon(pointCoords, polygonCoords) {
+    // Tạo đối tượng điểm từ tọa độ pointCoords
+    const pointToCheck = point(pointCoords);
+    // Tạo đối tượng polygon từ tọa độ polygonCoords
+    const polygonFeature = polygon([polygonCoords]);
+    // Kiểm tra xem điểm có nằm trong polygon không
+    return booleanPointInPolygon(pointToCheck, polygonFeature);
+}
+
+function getPopupColorClass(trungbinhAir) {
+    if (trungbinhAir < 50) {
+      return "green"; // Lớp CSS cho màu xanh
+    } else if (trungbinhAir >= 50 && trungbinhAir <= 100) {
+      return "yellow"; // Lớp CSS cho màu vàng
+    } else {
+      return "red"; // Lớp CSS cho màu đỏ
+    }
+  }
+
+
+  function getPopupStringClass(trungbinhAir) {
+    if (trungbinhAir < 50) {
+      return "Đây là mức bụi an toàn"; // Lớp CSS cho màu xanh
+    } else if (trungbinhAir >= 50 && trungbinhAir <= 100) {
+      return "Đây là mức bụi trung bình"; // Lớp CSS cho màu vàng
+    } else {
+      return "Đây là mức bụi nuy hiểm"; // Lớp CSS cho màu đỏ
+    }
+  }
+
+
 function LocationPopup() {
+    let trungbinhAir=null;
+    
     const [lat, setLat] = useState(16.66454);
     const [lng, setLng] = useState(108.55454);
-        const map = useMapEvents({
+    const map = useMapEvents({
     click(e) {
+      
         setLat(e.latlng.lat);
         setLng(e.latlng.lng);
+        let pointCoords = [e.latlng.lat,e.latlng.lng];
+        const polygonCoords =  cityPoly.geometry.coordinates[0].map(coord => [coord[1], coord[0]])
+
+        //   // Gọi hàm kiểm tra
+        const isInside = isPointInsidePolygon(pointCoords, polygonCoords);
+        console.log(isInside)
+        if (!isInside===true){properties="không xác định"} 
         
     },
     })
+    
         return (
-            <Popup position={[lat,lng]}>
+            <div>{console.log(getPopupColorClass(trungbinhAir))}
+            { properties !== "không xác định" && (<Popup position={[lat,lng]} className={getPopupColorClass(trungbinhAir)} >
                 
                 <h2>
                 Khu vưc {properties}
                 </h2>
                 <h3>
-                Chỉ số không khí trung bình ở đây là 50
+                Chỉ số không khí trung bình ở đây là {trungbinhAir}
                 </h3>
                 <h3>
-                Đây là mức độ không khí an toàn nhưng bạn vẫn nên đeo khẩu trang khi ra đường
+                {getPopupStringClass(trungbinhAir)}
                 </h3>
-            </Popup>
+            </Popup>)}
+        </div>
         )
-}
+    }
+
+
 const PolygonDaNang = () => {
-    
+
     return(
     <div>
+        <Polygon
+        positions={cityPoly.geometry.coordinates[0].map(coord => [coord[1], coord[0]])}
+        color="white"
+        />
+
+
         {polygonDaNang.features.map(state => {
         const coordinates = state.geometry.coordinates[0].map((item)=> [item[1], item[0]]);
         return (<Polygon
@@ -68,18 +125,20 @@ const PolygonDaNang = () => {
             })
             },
             click: (e) => {
+                
                 properties = state.properties["NAME_3"];
                 return ;
             }
         }}
         /> 
-       
         )
     }
     ) 
-   
     }   
-         <LocationPopup/>
+
+
+         <LocationPopup/> 
+        
         </div>
     )
 }
