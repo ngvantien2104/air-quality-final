@@ -5,44 +5,44 @@ import {map} from 'leaflet'
 import React, {  useEffect, useState } from "react";
 import PolygonDaNang from './Polygon/Polygon';
 import Heatmap from './heatmap/Heatmap';
-
-
+import ngo from './assets/ngo.png'
+import tien from './assets/tien.jpg'
+import thang from './assets/thang.jpg'
 
 function App() {
-  const [data, setData] = useState([]);
+var myHeaders = new Headers();
+myHeaders.append("Authorization", "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXZFVUkiOiI5YzMyMDI2OWU1ZmVhNTBiIiwiYXBwSUQiOiIzIiwiZW1haWwiOiJuZ3ZhbnRpZW4yMTA0QGdtYWlsLmNvbSIsInBhc3N3b3JkIjoidGllbjA5NzY3MjAyMjUiLCJpYXQiOjE2OTU2MjQ0MDR9.4b5XGSHtiItP70ckCTYSnu3wy-rqcNmEVF-KwfuaKIs");
+myHeaders.append("Content-Type", "application/json");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('http://10.10.54.110:3001/api/uplink', {
-          method: 'POST',
-          headers: {
-            'Authorization': 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXZFVUkiOiI2NDVjMmY0ODNkNjUwZGM2IiwiYXBwSUQiOiIzIiwiZW1haWwiOiJuZ29odXluaDA3MDdAZ21haWwuY29tIiwicGFzc3dvcmQiOiJuZ28xMjM0NTY3NyIsImlhdCI6MTY5NTA5MzI1NX0.dOaf1yMjYXqKkNAgHhOMWYNpuIiSB26dhUTyyAHWmjQ',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({"limit": 1000}),
-        });
+var raw = JSON.stringify({
+  "limit": 1
+});
 
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
 
-        const newData = await response.json();
-        setData((prevData) => [...prevData, newData]);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-},[]);
+fetch("https://api.vngalaxy.vn/api/uplink/", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
   return (
     
 
     <div className="App">
-      {console.log(JSON.stringify(data))}
-      <div className='sildebar'> <br/><br/>Thông tin thêm<br/>ẢNH<br/><br/>MÀU MÈ<br/><br/>THÔNG TIN CHỈ SỐ BỤI<br/><br/>LINK BÀI VIẾT</div>   
-      <MapContainer center={[16.048650404008928, 108.16870209934272]} zoom={11} scrollWheelZoom={false}
+      
+       <div className='sildebar'> <br/><br/>Thông tin thêm<br/><br/><br/><br/>THÔNG TIN CHỈ SỐ BỤI<br/><br/><a href="https://duongkhi.vn/chi-so-bui-min-pm-2-5-pm1-0-bao-nhieu-la-an-toan-cho-suc-khoe" target="_blank">Bài viết về chỉ số bụi mịn</a>
+       <br/><br/>
+       <br/><br/><br/> Liên Hệ
+       <div> <img src={ngo} alt='ngo'/>
+       <img src={tien} alt='tien'/>
+        <img src={thang} alt='thang'/></div>
+       </div>   
+       <div className='header'> Bản Đồ chỉ số không khí (bụi mịn) trong thành phố</div>   
+      <MapContainer center={[16.048650404008928, 108.16870209934272]} zoom={10} scrollWheelZoom={true}
         >
   <TileLayer
     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -51,9 +51,10 @@ function App() {
 
     
   <PolygonDaNang/>
-  <Heatmap/> 
+   <Heatmap/>  
   
-</MapContainer>  
+</MapContainer>   
+
     </div>
   );
 }

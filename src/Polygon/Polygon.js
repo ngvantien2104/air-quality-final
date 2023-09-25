@@ -43,7 +43,7 @@ function getPopupColorClass(trungbinhAir) {
 
 
 function LocationPopup() {
-    let trungbinhAir=null;
+    let trungbinhAir=80;
     
     const [lat, setLat] = useState(16.66454);
     const [lng, setLng] = useState(108.55454);
@@ -57,14 +57,14 @@ function LocationPopup() {
 
         //   // Gọi hàm kiểm tra
         const isInside = isPointInsidePolygon(pointCoords, polygonCoords);
-        console.log(isInside)
+       
         if (!isInside===true){properties="không xác định"} 
         
     },
     })
     
         return (
-            <div>{console.log(getPopupColorClass(trungbinhAir))}
+            <div>
             { properties !== "không xác định" && (<Popup position={[lat,lng]} className={getPopupColorClass(trungbinhAir)} >
                 
                 <h2>
@@ -107,7 +107,7 @@ const PolygonDaNang = () => {
             mouseover: (e)=> {
             const layer = e.target;
             layer.setStyle({
-                fillOpacity: 0.25,
+                fillOpacity: 0.1,
                 weight:2,
                 dashArray:"3",
                 color:'white',

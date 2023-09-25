@@ -1,4 +1,12 @@
 @import url("~leaflet/dist/leaflet.css");
+@keyframes fadeIn {
+  from {
+    opacity: 0; /* Popup bắt đầu với độ trong suốt là 0 */
+  }
+  to {
+    opacity: 1; /* Popup kết thúc với độ trong suốt là 1, tức là hiển thị hoàn toàn */
+  }
+}
 .leaflet-container{
   width: 100%;
   height: 100vh;
@@ -9,28 +17,36 @@
   box-shadow: none;
 }
 .red .leaflet-popup-content-wrapper  {
-  background:red;
+  background:rgba(176, 13, 13, 0.703);
   color:#fff;
   font-size:16px;
+  
   line-height:24px;
   border-radius: 0px;
   text-align: center;
+  
+  animation-name: fadeIn;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-in-out;
+  border-radius: 15px;
   }
   .green .leaflet-popup-content-wrapper  {
-    background:green;
-    color:#fff;
+    background:rgba(0, 128, 0, 0.629);
+    color:yellow;
     font-size:16px;
     line-height:24px;
     border-radius: 0px;
     text-align: center;
+    border-radius: 15px;
     }
     .yellow .leaflet-popup-content-wrapper  {
-      background:yellow;
-      color:#fff;
+      background:rgba(255, 255, 0, 0.742);
+      color:blue;
       font-size:16px;
       line-height:24px;
       border-radius: 0px;
       text-align: center;
+      border-radius: 15px;
       }
     
   .leaflet-popup-content-wrapper a {
@@ -40,15 +56,46 @@
   width:30px;
   height:15px;
   }
-  .sildebar{
-    padding: 10px;
+  .sildebar{ 
+    background-image: url('./fresh-background.jpg');
+    background-color: rgba(255, 255, 255, 0.7);padding: 10px;
     position: absolute;
     width: 250px;
     height: 100vh;
     z-index: 1000;
-    background: white;
     margin-left: 0px;
     transition: 0.5s;
     text-align: center;
     font-size:30px;
+    color:  white;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 1); /* Tạo bóng */
   }
+  a {
+    color: white;
+    font-size: 20px;
+  }
+  .header {
+    background-color: #333; /* Màu nền */
+    color: white; /* Màu chữ */
+    padding: 20px; /* Khoảng cách bên trong header */
+    text-align: center; /* Căn giữa nội dung */
+    font-size: 30px; /* Kích thước chữ */
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5); /* Tạo bóng */
+    position: fixed; /* Header cố định ở trên cùng */
+    top: 0; /* Hiển thị ở đầu trang */
+    left: 30%; /* Hiển thị ở bên trái */
+    font-weight: bold;
+    z-index: 1000; /* Z-index cao hơn sidebar */
+    margin: 10px 10px 10px 10px;
+    border-radius: 15px;
+    text-transform: uppercase;
+  }
+  
+img{
+  height: 80px;
+  width: 70px;
+  margin: 5px;
+  border-radius: 10px;
+  bottom: 0;
+  left: 0;
+}
