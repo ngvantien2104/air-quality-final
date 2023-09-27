@@ -8,7 +8,7 @@ import Heatmap from './heatmap/Heatmap';
 import ngo from './assets/ngo.png'
 import tien from './assets/tien.jpg'
 import thang from './assets/thang.jpg'
-
+import icon from './assets/icon.png'
 function App() {
 var myHeaders = new Headers();
 myHeaders.append("Authorization", "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXZFVUkiOiI5YzMyMDI2OWU1ZmVhNTBiIiwiYXBwSUQiOiIzIiwiZW1haWwiOiJuZ3ZhbnRpZW4yMTA0QGdtYWlsLmNvbSIsInBhc3N3b3JkIjoidGllbjA5NzY3MjAyMjUiLCJpYXQiOjE2OTU2MjQ0MDR9.4b5XGSHtiItP70ckCTYSnu3wy-rqcNmEVF-KwfuaKIs");
@@ -37,11 +37,11 @@ fetch("https://api.vngalaxy.vn/api/uplink/", requestOptions)
        <div className='sildebar'> <br/><br/>Thông tin thêm<br/><br/><br/><br/>THÔNG TIN CHỈ SỐ BỤI<br/><br/><a href="https://duongkhi.vn/chi-so-bui-min-pm-2-5-pm1-0-bao-nhieu-la-an-toan-cho-suc-khoe" target="_blank">Bài viết về chỉ số bụi mịn</a>
        <br/><br/>
        <br/><br/><br/> Liên Hệ
-       <div> <img src={ngo} alt='ngo'/>
-       <img src={tien} alt='tien'/>
-        <img src={thang} alt='thang'/></div>
+       <div> <img src={ngo} alt='ngo' className='member'/>
+       <img src={tien} alt='tien' className='member'/>
+        <img src={thang} alt='thang'className='member'/></div>
        </div>   
-       <div className='header'> Bản Đồ chỉ số không khí (bụi mịn) trong thành phố</div>   
+       <div className='header'><img src={icon} alt='icon' className='icon'/>Bản Đồ chỉ số không khí (bụi mịn) trong thành phố</div>   
       <MapContainer center={[16.048650404008928, 108.16870209934272]} zoom={10} scrollWheelZoom={true}
         >
   <TileLayer

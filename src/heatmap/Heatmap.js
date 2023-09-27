@@ -13,7 +13,7 @@ const Heatmap = () => {
         return [lat, lng, randomNumber];
       });
       
-      console.log(coordinatesArray);
+      
     return (
     <div>
         <HeatmapLayer

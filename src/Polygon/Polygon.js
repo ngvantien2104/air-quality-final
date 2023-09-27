@@ -43,7 +43,7 @@ function getPopupColorClass(trungbinhAir) {
 
 
 function LocationPopup() {
-    let trungbinhAir=80;
+    let trungbinhAir=15;
     
     const [lat, setLat] = useState(16.66454);
     const [lng, setLng] = useState(108.55454);
@@ -107,7 +107,7 @@ const PolygonDaNang = () => {
             mouseover: (e)=> {
             const layer = e.target;
             layer.setStyle({
-                fillOpacity: 0.1,
+                fillOpacity: 0.12,
                 weight:2,
                 dashArray:"3",
                 color:'white',
