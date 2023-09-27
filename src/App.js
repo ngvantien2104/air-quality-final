@@ -9,31 +9,46 @@ import ngo from './assets/ngo.png'
 import tien from './assets/tien.jpg'
 import thang from './assets/thang.jpg'
 import icon from './assets/icon.png'
+import io from 'socket.io-client'
+
+
 function App() {
-var myHeaders = new Headers();
-myHeaders.append("Authorization", "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXZFVUkiOiI5YzMyMDI2OWU1ZmVhNTBiIiwiYXBwSUQiOiIzIiwiZW1haWwiOiJuZ3ZhbnRpZW4yMTA0QGdtYWlsLmNvbSIsInBhc3N3b3JkIjoidGllbjA5NzY3MjAyMjUiLCJpYXQiOjE2OTU2MjQ0MDR9.4b5XGSHtiItP70ckCTYSnu3wy-rqcNmEVF-KwfuaKIs");
-myHeaders.append("Content-Type", "application/json");
 
-var raw = JSON.stringify({
-  "limit": 1
-});
+  useEffect(() => {
+    const socket = io('http://localhost:30010'); // Thay thế URL bằng URL thực tế của máy chủ socket của bạn
 
-var requestOptions = {
-  method: 'POST',
-  headers: myHeaders,
-  body: raw,
-  redirect: 'follow'
-};
+    socket.on('test', () => {
+              var myHeaders = new Headers();
+        myHeaders.append("Authorization", "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXZFVUkiOiI5YzMyMDI2OWU1ZmVhNTBiIiwiYXBwSUQiOiIzIiwiZW1haWwiOiJuZ3ZhbnRpZW4yMTA0QGdtYWlsLmNvbSIsInBhc3N3b3JkIjoidGllbjA5NzY3MjAyMjUiLCJpYXQiOjE2OTU2MjQ0MDR9.4b5XGSHtiItP70ckCTYSnu3wy-rqcNmEVF-KwfuaKIs");
+        myHeaders.append("Content-Type", "application/json");
 
-fetch("https://api.vngalaxy.vn/api/uplink/", requestOptions)
-  .then(response => response.text())
-  .then(result => console.log(result))
-  .catch(error => console.log('error', error));
+        var raw = JSON.stringify({
+          "limit": 1
+        });
+
+        var requestOptions = {
+          method: 'POST',
+          headers: myHeaders,
+          body: raw,
+          redirect: 'follow'
+        };
+
+        fetch("https://api.vngalaxy.vn/api/uplink/", requestOptions)
+          .then(response => response.text())
+          .then(result => console.log(result))
+          .catch(error => console.log('error', error));
+    });
+    return () => {
+      socket.disconnect(); // Ngắt kết nối khi component bị unmounted
+    };
+  }, []);
+
+
   return (
     
 
     <div className="App">
-      
+       
        <div className='sildebar'> <br/><br/>Thông tin thêm<br/><br/><br/><br/>THÔNG TIN CHỈ SỐ BỤI<br/><br/><a href="https://duongkhi.vn/chi-so-bui-min-pm-2-5-pm1-0-bao-nhieu-la-an-toan-cho-suc-khoe" target="_blank">Bài viết về chỉ số bụi mịn</a>
        <br/><br/>
        <br/><br/><br/> Liên Hệ
