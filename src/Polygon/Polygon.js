@@ -43,7 +43,7 @@ function getPopupColorClass(trungbinhAir) {
 
 
 function LocationPopup() {
-    let trungbinhAir=15;
+    let trungbinhAir=150;
     
     const [lat, setLat] = useState(16.66454);
     const [lng, setLng] = useState(108.55454);
