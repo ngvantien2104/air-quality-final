@@ -60,7 +60,7 @@
     background-image: url('./fresh-background.jpg');
     background-color: rgba(255, 255, 255, 0.7);padding: 10px;
     position: absolute;
-    width: 250px;
+    width: 400px;
     height: 100vh;
     z-index: 1000;
     margin-left: 0px;
@@ -93,12 +93,17 @@
   }
   
 img.member{
-  height: 80px;
-  width: 70px;
+  height: 100px;
+  width: 100px;
   margin: 5px;
   bottom: 0;
   left: 0;
   border-radius: 10px;
+}
+img.thangdo{
+  height: 370px;
+  width: 400px;
+
 }
 img.icon{
   height: 80px;

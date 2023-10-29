@@ -21,29 +21,33 @@ function isPointInsidePolygon(pointCoords, polygonCoords) {
 }
 
 function getPopupColorClass(trungbinhAir) {
-    if (trungbinhAir < 50) {
+    if (trungbinhAir < 12) {
       return "green"; // Lớp CSS cho màu xanh
-    } else if (trungbinhAir >= 50 && trungbinhAir <= 100) {
+    } else if (trungbinhAir >= 12.1 && trungbinhAir <= 35.4) {
       return "yellow"; // Lớp CSS cho màu vàng
-    } else {
+    } else if(trungbinhAir >= 35.4){
       return "red"; // Lớp CSS cho màu đỏ
+    } else  {
+      return "yellow"; // Lớp CSS cho màu đỏ
     }
   }
 
 
   function getPopupStringClass(trungbinhAir) {
-    if (trungbinhAir < 50) {
+    if (trungbinhAir < 12) {
       return "Đây là mức bụi an toàn"; // Lớp CSS cho màu xanh
-    } else if (trungbinhAir >= 50 && trungbinhAir <= 100) {
+    } else if (trungbinhAir >= 12.1 && trungbinhAir <= 35.5) {
       return "Đây là mức bụi trung bình"; // Lớp CSS cho màu vàng
+    } else if ( trungbinhAir<=35.5){
+      return "Đây là mức bụi nguy hiểm"; // Lớp CSS cho màu đỏ
     } else {
-      return "Đây là mức bụi nuy hiểm"; // Lớp CSS cho màu đỏ
+      return "Đây là mức bụi chua xac dinh"; // Lớp CSS cho màu đỏ
     }
   }
 
 
 function LocationPopup() {
-    let trungbinhAir=150;
+    let trungbinhAir="chưa xác đinh";
     
     const [lat, setLat] = useState(16.66454);
     const [lng, setLng] = useState(108.55454);

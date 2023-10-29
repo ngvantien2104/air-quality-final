@@ -5,53 +5,91 @@ import {map} from 'leaflet'
 import React, {  useEffect, useState } from "react";
 import PolygonDaNang from './Polygon/Polygon';
 import Heatmap from './heatmap/Heatmap';
-import ngo from './assets/ngo.png'
+import ngo from './assets/ngo.jpg'
 import tien from './assets/tien.jpg'
 import thang from './assets/thang.jpg'
 import icon from './assets/icon.png'
+import thangdobui from './assets/thangdobui.jpg'
 import io from 'socket.io-client'
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+
+const customIcon = new L.Icon({
+  iconUrl: require("./iconmarker.png"),
+  iconSize: [32, 32], // Kích thước biểu tượng
+  iconAnchor: [16,37],
+  popupAnchor: [0,-20]
+});
+
+function MapWithMarkers({ data }) {
+  return (
+    <div>
+      {data.map((item, index) => (
+        <Marker key={index} position={[item.objectJSON.data.Location.latitude, item.objectJSON.data.Location.longitude]} icon={customIcon} >
+          <Popup>
+            <h3>Time: {item.timeSystem}</h3>
+            <p>PM10: {item.objectJSON.data.Dust['pm10_ug/m3']} µg/m³</p>
+            <p>PM1: {item.objectJSON.data.Dust['pm1_ug/m3']} µg/m³</p>
+            <p>PM2.5: {item.objectJSON.data.Dust['pm25_ug/m3']} µg/m³</p> 
+           
+          </Popup>
+        </Marker>
+      ))}
+    </div>
+  );
+}
+
 
 
 function App() {
 
-  useEffect(() => {
-    const socket = io('http://localhost:30010'); // Thay thế URL bằng URL thực tế của máy chủ socket của bạn
+const [extractedData, setExtractedData] = useState([]); // Khởi tạo extractedData với useState
 
-    socket.on('test', () => {
-              var myHeaders = new Headers();
-        myHeaders.append("Authorization", "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXZFVUkiOiI5YzMyMDI2OWU1ZmVhNTBiIiwiYXBwSUQiOiIzIiwiZW1haWwiOiJuZ3ZhbnRpZW4yMTA0QGdtYWlsLmNvbSIsInBhc3N3b3JkIjoidGllbjA5NzY3MjAyMjUiLCJpYXQiOjE2OTU2MjQ0MDR9.4b5XGSHtiItP70ckCTYSnu3wy-rqcNmEVF-KwfuaKIs");
-        myHeaders.append("Content-Type", "application/json");
+useEffect(() => {
+  fetchData(); // Gọi fetchData khi component được tạo
+}, []); // Dấu [] đảm bảo fetchData chỉ chạy một lần khi component được render
 
-        var raw = JSON.stringify({
-          "limit": 1
-        });
+const fetchData = () => {
+  var myHeaders = new Headers();
+  myHeaders.append("Authorization", "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXZFVUkiOiI2NDVjMmY0ODNkNjUwZGM2IiwiYXBwSUQiOiIzIiwiZW1haWwiOiJuZ3ZhbnRpZW4yMTA0QGdtYWlsLmNvbSIsInBhc3N3b3JkIjoidGllbjA5NzY3MjAyMjUiLCJpYXQiOjE2OTg1NTI1NzN9._upRx8YbpZT8Y_0XuDtw6vdNtpgK_xtcsZC0assw4UM");
+  myHeaders.append("Content-Type", "application/json");
 
-        var requestOptions = {
-          method: 'POST',
-          headers: myHeaders,
-          body: raw,
-          redirect: 'follow'
-        };
+  var raw = JSON.stringify({
+    "limit": 150
+  });
 
-        fetch("https://api.vngalaxy.vn/api/uplink/", requestOptions)
-          .then(response => response.text())
-          .then(result => console.log(result))
-          .catch(error => console.log('error', error));
-    });
-    return () => {
-      socket.disconnect(); // Ngắt kết nối khi component bị unmounted
-    };
-  }, []);
+  var requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow'
+  };
+
+  fetch("https://api.vngalaxy.vn/api/uplink/", requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      if (Array.isArray(data.data) && data.data.length > 0) {
+        const extractedData = data.data.map(item => ({
+          objectJSON: item.objectJSON,
+          timeSystem: item.timeSystem
+        }));
+        setExtractedData(extractedData); // Cập nhật extractedData bằng useState
+      } else {
+        console.log("Không tìm thấy dữ liệu hoặc cấu trúc JSON không phù hợp.");
+      }
+    })
+    .catch(error => console.error('Lỗi:', error));
+};
+  
+
 
 
   return (
     
-
     <div className="App">
        
-       <div className='sildebar'> <br/><br/>Thông tin thêm<br/><br/><br/><br/>THÔNG TIN CHỈ SỐ BỤI<br/><br/><a href="https://duongkhi.vn/chi-so-bui-min-pm-2-5-pm1-0-bao-nhieu-la-an-toan-cho-suc-khoe" target="_blank">Bài viết về chỉ số bụi mịn</a>
-       <br/><br/>
-       <br/><br/><br/> Liên Hệ
+       <div className='sildebar'> THÔNG TIN THÊM<br/><br/>Thông tin chỉ số bụi<br/><img src={thangdobui} alt='thangdobui' className='thangdo'/><br/><a href="https://duongkhi.vn/chi-so-bui-min-pm-2-5-pm1-0-bao-nhieu-la-an-toan-cho-suc-khoe" target="_blank">Bài viết về chỉ số bụi mịn</a>
+       <br/> Liên Hệ
        <div> <img src={ngo} alt='ngo' className='member'/>
        <img src={tien} alt='tien' className='member'/>
         <img src={thang} alt='thang'className='member'/></div>
@@ -64,10 +102,15 @@ function App() {
     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
   />
 
-    
+     
   <PolygonDaNang/>
    <Heatmap/>  
-  
+ <div>
+   {/* Hiển thị extractedData tại đây */}
+  {console.log(extractedData)}
+      <h1>Map with Marker</h1>
+      <MapWithMarkers data={extractedData} />
+    </div>
 </MapContainer>   
 
     </div>
