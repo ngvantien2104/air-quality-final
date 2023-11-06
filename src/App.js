@@ -10,38 +10,40 @@ import tien from './assets/tien.jpg'
 import thang from './assets/thang.jpg'
 import icon from './assets/icon.png'
 import thangdobui from './assets/thangdobui.jpg'
-import io from 'socket.io-client'
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { random } from '@turf/turf';
 
-const customIcon = new L.Icon({
-  iconUrl: require("./iconmarker.png"),
-  iconSize: [32, 32], // Kích thước biểu tượng
-  iconAnchor: [16,37],
-  popupAnchor: [0,-20]
-});
 
-function MapWithMarkers({ data }) {
-  return (
-    <div>
-      {data.map((item, index) => (
-        <Marker key={index} position={[item.objectJSON.data.Location.latitude, item.objectJSON.data.Location.longitude]} icon={customIcon} >
-          <Popup>
-            <h3>Time: {item.timeSystem}</h3>
-            <p>PM10: {item.objectJSON.data.Dust['pm10_ug/m3']} µg/m³</p>
-            <p>PM1: {item.objectJSON.data.Dust['pm1_ug/m3']} µg/m³</p>
-            <p>PM2.5: {item.objectJSON.data.Dust['pm25_ug/m3']} µg/m³</p> 
-           
-          </Popup>
-        </Marker>
-      ))}
-    </div>
-  );
-}
 
 
 
 function App() {
+
+  const customIcon = new L.Icon({
+    iconUrl: require("./iconmarker.png"),
+    iconSize: [32, 32], // Kích thước biểu tượng
+    iconAnchor: [16,37],
+    popupAnchor: [0,-20]
+  });
+  
+  function MapWithMarkers({ data }) {
+    return (
+      <div>
+        {data.map((item, index) => (
+          <Marker key={index} position={[item.objectJSON.data.Location.latitude, item.objectJSON.data.Location.longitude]} icon={customIcon} >
+            <Popup>
+              <h3>Time: {item.timeSystem}</h3>
+              <p>PM10: {item.objectJSON.data.Dust['pm10_ug/m3']} µg/m³</p>
+              <p>PM1: {item.objectJSON.data.Dust['pm1_ug/m3']} µg/m³</p>
+              <p>PM2.5: {item.objectJSON.data.Dust['pm25_ug/m3']} µg/m³</p> 
+              <p>cường độ tín hiệu: {item.rssi}</p> 
+            </Popup>
+          </Marker>
+        ))}
+      </div>
+    );
+  }
 
 const [extractedData, setExtractedData] = useState([]); // Khởi tạo extractedData với useState
 
@@ -49,13 +51,16 @@ useEffect(() => {
   fetchData(); // Gọi fetchData khi component được tạo
 }, []); // Dấu [] đảm bảo fetchData chỉ chạy một lần khi component được render
 
+   // Xóa timeout khi component bị hủy
+ 
 const fetchData = () => {
   var myHeaders = new Headers();
   myHeaders.append("Authorization", "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXZFVUkiOiI2NDVjMmY0ODNkNjUwZGM2IiwiYXBwSUQiOiIzIiwiZW1haWwiOiJuZ3ZhbnRpZW4yMTA0QGdtYWlsLmNvbSIsInBhc3N3b3JkIjoidGllbjA5NzY3MjAyMjUiLCJpYXQiOjE2OTg1NTI1NzN9._upRx8YbpZT8Y_0XuDtw6vdNtpgK_xtcsZC0assw4UM");
   myHeaders.append("Content-Type", "application/json");
 
   var raw = JSON.stringify({
-    "limit": 150
+    "limit": 1
+
   });
 
   var requestOptions = {
@@ -66,14 +71,19 @@ const fetchData = () => {
   };
 
   fetch("https://api.vngalaxy.vn/api/uplink/", requestOptions)
-    .then(response => response.json())
+    .then(response => response.json() )
     .then(data => {
+      
       if (Array.isArray(data.data) && data.data.length > 0) {
-        const extractedData = data.data.map(item => ({
+        
+        const temp = data.data.map(item => ({
           objectJSON: item.objectJSON,
-          timeSystem: item.timeSystem
+          timeSystem: item.timeSystem,
+          rssi:       item.rxInfo.rssi,
+        
         }));
-        setExtractedData(extractedData); // Cập nhật extractedData bằng useState
+        setExtractedData(temp); // Cập nhật extractedData bằng useState
+        console.log(temp)
       } else {
         console.log("Không tìm thấy dữ liệu hoặc cấu trúc JSON không phù hợp.");
       }
@@ -81,6 +91,12 @@ const fetchData = () => {
     .catch(error => console.error('Lỗi:', error));
 };
   
+
+setInterval(() => {
+  // Hành động bạn muốn thực hiện sau 1 phút
+
+  fetchData();
+}, 60000); // 1 phút = 60,000 mili giây
 
 
 
