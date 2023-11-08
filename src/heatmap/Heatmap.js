@@ -4,30 +4,30 @@ import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
 import { HeatmapLayer } from "react-leaflet-heatmap-layer-v3";
 import { addressPoints } from './realworld.10000';
 
-const Heatmap = () => {
-     
-      
-      const coordinatesArray = addressPoints.features.map(feature => {
-        const [lng, lat] = feature.geometry.coordinates;
-        const randomNumber = Math.floor(Math.random() * 150); // Số ngẫu nhiên từ 0 đến 150
-        return [lat, lng, randomNumber];
-      });
-      
-      
-    return (
-    <div>
-        <HeatmapLayer
-          fitBoundsOnLoad
-          fitBoundsOnUpdate
-          points={coordinatesArray}
-          longitudeExtractor={m => m[1]}
-          latitudeExtractor={m => m[0]}
-          intensityExtractor={m => parseFloat(m[0])}
-          radius={20} // Đặt giá trị bán kính cố định
-          blur={30} // Đặt giá trị độ mờ cố định
-        />
-    </div>
- )
-}
 
+
+
+const Heatmap = ({ dataIn }) => { // Sử dụng dataIn như một đối số đầu vào
+
+  const data = dataIn.map((item) => ({
+    latitude: item.objectJSON.data.Location.latitude,
+    longitude: item.objectJSON.data.Location.longitude,
+    intensity: parseFloat(item.objectJSON.data.Dust['pm25_ug/m3']), // Sửa tên thuộc tính cho đúng
+  }));
+
+  return (
+    <div>
+      <HeatmapLayer
+  fitBoundsOnLoad={false}
+  fitBoundsOnUpdate={false}
+  points={data}
+  longitudeExtractor={(m) => m.longitude}
+  latitudeExtractor={(m) => m.latitude}
+  intensityExtractor={(m) => m.intensity}
+  radius={20} // Đặt giá trị bán kính cố định
+  blur={25} // Đặt giá trị độ mờ cố định
+/>
+    </div>
+  );
+};
 export default Heatmap
