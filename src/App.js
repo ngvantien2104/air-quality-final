@@ -256,8 +256,8 @@ const toggleHeatmapMode = () => {
         <br/>
         
         
-         <button onClick={handleFetchOneHour}>Dữ liệu 1 giờ trước</button>
-        <button onClick={handleFetchOneDay}>Dữ liệu 1 ngày trước</button>
+         <button onClick={handleFetchOneHour}>Dữ liệu 1 giờ gần nhất</button>
+        <button onClick={handleFetchOneDay}>Dữ liệu 1 ngày gần nhất</button>
        
       
         <img src={thangdobui} alt='thangdobui'className='thangdo'/> <br/><a href="https://duongkhi.vn/chi-so-bui-min-pm-2-5-pm1-0-bao-nhieu-la-an-toan-cho-suc-khoe" target="_blank">Bài viết  về chỉ số bụi mịn</a>
