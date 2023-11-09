@@ -85,14 +85,21 @@ function App() {
         {data.map((item, index) => (
           <Marker key={index} position={[item.objectJSON.data.Location.latitude, item.objectJSON.data.Location.longitude]} icon={getIconColorClass(item.objectJSON.data.Dust['pm25_ug/m3'])} >
             <Popup>
-            
+              
               <h3>Time: {item.timeSystem}</h3>
               <p>PM10: {item.objectJSON.data.Dust['pm10_ug/m3']} µg/m³</p>
               <p>PM1: {item.objectJSON.data.Dust['pm1_ug/m3']} µg/m³</p>
               <p>PM2.5: {item.objectJSON.data.Dust['pm25_ug/m3']} µg/m³</p> 
-              <p>cường độ tín hiệu: -121 dBm</p> 
-              <p>Location {[item.objectJSON.data.Location.latitude, item.objectJSON.data.Location.longitude]}</p>
+              
+              <p>Location {item.objectJSON.data.Location.latitude}, {item.objectJSON.data.Location.longitude}</p>
+              {item.rxInfo.map((tesstInfor, index) => (
+                 <div>
+                  <p>GatewayID: {tesstInfor.gatewayID} : rssi={tesstInfor.rssi} dBm</p> 
+                 
+               </div>
+              ))}
             </Popup>
+            
           </Marker>
         ))}
       </div>
@@ -204,7 +211,7 @@ useEffect(() => {
       }
 
       const responseData = await response.json();
-      setData(responseData.mssg);
+      setData(responseData);
     } catch (err) {
       setError(err);
     }
@@ -214,10 +221,12 @@ useEffect(() => {
 }, [fetchURL]);
 const handleFetchOneHour = () => {
   setFetchURL('http://localhost:3002/onehour');
+  window.location.reload();
 };
 
 const handleFetchOneDay = () => {
   setFetchURL('http://localhost:3002/oneday');
+ 
 };
 
 
@@ -251,7 +260,7 @@ const toggleHeatmapMode = () => {
           borderRadius: "5px", // Bo góc nút
           fontSize: "24px"
         }}>
-        {isHeatmapMode ? "Chuyển sang map thường" : "Chuyển sang Heatmap"}
+         {"Chuyển trạng thái bản đồ"}
         </button>
         <br/>
         
@@ -260,7 +269,7 @@ const toggleHeatmapMode = () => {
         <button onClick={handleFetchOneDay}>Dữ liệu 1 ngày gần nhất</button>
        
       
-        <img src={thangdobui} alt='thangdobui'className='thangdo'/> <br/><a href="https://duongkhi.vn/chi-so-bui-min-pm-2-5-pm1-0-bao-nhieu-la-an-toan-cho-suc-khoe" target="_blank">Bài viết  về chỉ số bụi mịn</a>
+         <br/><a href="https://duongkhi.vn/chi-so-bui-min-pm-2-5-pm1-0-bao-nhieu-la-an-toan-cho-suc-khoe" target="_blank">Bài viết  về chỉ số bụi mịn</a>
        <br/> Liên Hệ <br/>
 
 
@@ -278,8 +287,12 @@ const toggleHeatmapMode = () => {
        </div>   
 
 
-       <div className='header'><img src={icon} alt='icon' className='icon'/>Bản Đồ chỉ số bụi mịn trong thành phố</div>   
-      <MapContainer center={[16.048650404008928, 108.16870209934272]} zoom={10} scrollWheelZoom={true}
+       <div className='header'><img src={icon} alt='icon' className='icon'/>{isHeatmapMode ? "BẢN ĐỒ CHỈ SỐ CƯỜNG ĐỘ TÍNH HIỆU TRONG THÀNH PHỐ" : "BẢN ĐỒ CHỈ SỐ BỤI MỊN TRONG THÀNH PHỐ"}</div>   
+       {isHeatmapMode ? null : (
+        <img src={thangdobui} alt='thangdobui' className='thangdo' />
+      )}
+       
+      <MapContainer center={[16.062895, 108.161310]} zoom={14} scrollWheelZoom={true}
         >
   <TileLayer
     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -306,7 +319,7 @@ const toggleHeatmapMode = () => {
       )}
     </div>
     </div>
-    <Marker  position={[16.06915364201322,108.1513955028231]} icon={busIcon} >
+    <Marker  position={[message.data.Location.latitude,message.data.Location.longitude]} icon={busIcon} >
             <Popup>
               {console.log(message.data.Dust['pm10_ug/m3'])}
                <p>Vị Trí Mới Nhất của xe bus</p>

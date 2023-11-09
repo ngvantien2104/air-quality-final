@@ -101,9 +101,18 @@ img.member{
   border-radius: 10px;
 }
 img.thangdo{
-  height: 300px;
-  width: 400px;
+  height: 25px;
+  width: 700px;
 
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5); /* Tạo bóng */
+    position: fixed; /* Header cố định ở trên cùng */
+    bottom: 0; /* Hiển thị ở đầu trang */
+    left: 30%; /* Hiển thị ở bên trái */
+    font-weight: bold;
+    z-index: 1000; /* Z-index cao hơn sidebar */
+    margin: 5px 5px 5px 5px;
+    border-radius: 15px;
+    text-transform: uppercase;
 }
 img.icon{
   height: 80px;

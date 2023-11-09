@@ -8,13 +8,17 @@ import { addressPoints } from './realworld.10000';
 
 
 const Heatmap = ({ dataIn }) => { // Sử dụng dataIn như một đối số đầu vào
-
-  const data = dataIn.map((item) => ({
+  console.log(dataIn)
+  const data = dataIn.map((item) => (
+   
+    {
     latitude: item.objectJSON.data.Location.latitude,
     longitude: item.objectJSON.data.Location.longitude,
-    intensity: parseFloat(item.objectJSON.data.Dust['pm25_ug/m3']), // Sửa tên thuộc tính cho đúng
+    intensity: parseFloat(Math.abs(item.rxInfo[0].rssi)), // Sửa tên thuộc tính cho đúng
+   
   }));
-
+  
+  console.log(JSON.stringify(data))
   return (
     <div>
       <HeatmapLayer
