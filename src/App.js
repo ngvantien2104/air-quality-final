@@ -93,10 +93,14 @@ function App() {
               
               <p>Location {item.objectJSON.data.Location.latitude}, {item.objectJSON.data.Location.longitude}</p>
               {item.rxInfo.map((tesstInfor, index) => (
-                 <div>
-                  <p>GatewayID: {tesstInfor.gatewayID} : rssi={tesstInfor.rssi} dBm</p> 
-                 
-               </div>
+  <div key={index}>
+    <p>
+      GatewayID: {tesstInfor?.gatewayID} : rssi={tesstInfor && tesstInfor.rssi !== undefined ? tesstInfor.rssi : -100} dBm
+    </p>
+  </div>
+
+
+
               ))}
             </Popup>
             
@@ -248,7 +252,7 @@ const toggleHeatmapMode = () => {
         
          THÔNG TIN THÊM<br/>
        
-       
+         <br/><br/><br/><br/>
         <br/>
         <button onClick={toggleHeatmapMode} 
         style={{
@@ -270,7 +274,7 @@ const toggleHeatmapMode = () => {
        
       
          <br/><a href="https://duongkhi.vn/chi-so-bui-min-pm-2-5-pm1-0-bao-nhieu-la-an-toan-cho-suc-khoe" target="_blank">Bài viết  về chỉ số bụi mịn</a>
-       <br/> Liên Hệ <br/>
+       <br/><br/><br/><br/><br/> Liên Hệ <br/>
 
 
       
